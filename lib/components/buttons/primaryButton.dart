@@ -17,9 +17,9 @@ class PrimaryButton extends StatelessWidget {
         ),
         textColor: Colors.white,
         color: Colors.teal[500],
-        elevation: 3.0,
+        elevation: 10.0,
         padding: EdgeInsets.fromLTRB(50.0, 20.0, 50.0, 20.0),
-        splashColor: Colors.teal[600],
+        splashColor: Colors.teal[800],
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(100.0),
         ),
