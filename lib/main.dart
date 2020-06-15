@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'components/guest/app.dart';
+import './components/guest/guest.dart';
+import './components/guest/login.dart';
+import './components/guest/register.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,12 +19,14 @@ class MyApp extends StatelessWidget {
           padding: EdgeInsets.all(25),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              App()
-            ],
+            children: <Widget>[Guest()],
           ),
-        )
+        ),
       ),
+      routes: <String, WidgetBuilder>{
+        '/login': (BuildContext context) => Login(),
+        '/register': (BuildContext context) => Register(),
+      },
     );
   }
 }

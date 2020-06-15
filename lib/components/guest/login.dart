@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../buttons/primaryButton.dart';
-import 'dart:async';
-import './authentication.dart';
+import '../../models/authentication.dart';
+import '../../components/spinners/loader.dart';
 
 class Login extends StatefulWidget {
   Login({Key key}) : super(key: key);
@@ -11,41 +11,55 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  bool isLoading = false;
+  bool _isLoading = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final _errorSnackBar = SnackBar(
       content: Text(
-    'Unable to Login',
-    textAlign: TextAlign.center,
-  ));
-  String test = '';
+      'Unable to Login',
+      textAlign: TextAlign.center,
+    ),
+  );
 
+  Authentication authentication = new Authentication();
+  
+  void _toggleLoading() {
+    setState(() {
+      _isLoading = !_isLoading;
+    });
+  }
 
   _submitForm(BuildContext context) {
     final FormState form = _formKey.currentState;
 
     if (form.validate()) {
-      setState(() {
-        isLoading: true;
-      });
-       Authentication.login(emailController.text.trim(), passwordController.text.trim())
+      _toggleLoading();
+       authentication.login(emailController.text.trim(), passwordController.text.trim())
        .then((data) => {
-         print('yeet') //is working correctly
+         print('yeet'),
+         _toggleLoading()
        })
        .catchError((e) => {
-         print(e)
-       });
-
+         print('yote'),
+         _toggleLoading(),
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              e,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      });
     } else {
-      Scaffold.of(context).showSnackBar(_errorSnackBar);
+      // Scaffold.of(context).showSnackBar(_errorSnackBar);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return _isLoading ? Loader() : Scaffold(
       appBar: AppBar(
           title: Center(
         child: Text('Login'),
@@ -115,7 +129,9 @@ class _LoginState extends State<Login> {
                     padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                     child: InkWell(
                       child: Text('Create an Account'),
-                      onTap: () {},
+                      onTap: () => {
+                        Navigator.of(context).popAndPushNamed('/register'),
+                      },
                     ),
                   )
                 ],
